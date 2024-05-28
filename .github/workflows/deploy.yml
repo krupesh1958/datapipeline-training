@@ -1,0 +1,73 @@
+name: Deploy file and layers into Lambda
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push or pull request to the main branch
+
+jobs:
+  deploy-function:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.12
+
+      - name: Package Lambda Function
+        run: |
+          cd auth
+          zip -r ../s3_tiggered_handler.zip .
+          cd ..
+          cd testing
+          zip -r ../sqs_triggered_handler.zip .
+          cd ..
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}  # Update this to your AWS region
+
+      - name: Deploy authentication code
+        env:
+          s3_triggered_func: ${{ secrets.S3_TRIGGERED_FUNCTION }}
+        run: |
+          unzip s3_tiggered_handler.zip -d lambda_function
+          for file in $(git diff-tree --no-commit-id --name-only -r HEAD); do
+            if [[$file == *.py]]; then
+              mkdir -p lambda_function/$(dirname $file)
+              cp $file lambda_function/$file
+
+              cat lambda_function/$file
+            fi
+          done
+          cd lambda_function
+          zip -r ../update_lambda.zip .
+          cd ..
+
+          aws lambda update-function-code --function-name $s3_triggered_func --zip-file fileb://update_lambda.zip
+
+      - name: Deploy testing code
+        env:
+          sqs_tirggered_func: ${{ secrets.SQS_TIRGGERED_FUNCTION }}
+        run: |
+          unzip sqs_triggered_handler.zip -d test_lambda_function
+          for file in $(git diff-tree --no-commit-id --name-only -r HEAD); do
+            if [[$file == *.py]]; then
+              makdir -p test_lambda_function/$(direname $file)
+              cp $file test_lambda_function/$file
+
+              cat test_lambda_function/$file
+            fi
+          done
+          cd test_lambda_function
+          zip -r ../test_updated_code.zip .
+          cd ..
+
+          aws lambda update-function-code --function-name $sqs_tirggered_func --zip-file fileb://test_updated_code.zip
