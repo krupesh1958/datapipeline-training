@@ -18,7 +18,7 @@ MessageType = Union[ClientError, JsonResponse, None]
 class SQS:
 
     def __init__(self) -> None:
-        self._sqs_queue = None
+        self._name = None
         self._sqs_queue_url = None
 
     @property
@@ -30,11 +30,12 @@ class SQS:
         :return: A Queue object.
         """
         try:
+            if not self._name: return
             queue = boto_sqs.get_queue_by_name(QueueName=self._name)
             print("Got queue '%s' with URL=%s", self._name, queue.url)
         except ClientError as error:
             print("Couldn't get queue named %s.", self._name)
-            raise
+            return
         else:
             self._sqs_queue_url = queue
             return queue
@@ -59,7 +60,7 @@ class SQS:
             print("Created queue '%s' with URL=%s", name, queue.url)
         except ClientError as error:
             print("Couldn't create queue named '%s'.", name)
-            raise error
+            return
         else:
             self._name = name
 
@@ -77,4 +78,4 @@ class SQS:
             print("Deleted queue url=%s", self._sqs_queue_url)
         except ClientError as error:
             print("Couldn't delete queue with URL=%s!", self._sqs_queue_url)
-            raise error
+            return

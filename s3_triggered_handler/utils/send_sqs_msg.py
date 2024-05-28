@@ -15,11 +15,11 @@ def send_sqs(content) -> None:
     """
     if qurl:= not qwrap.sqs_queue:
         qwrap.sqs_queue = "testing.fifo"
-        qurl = queue_wrapper.SQS()
+        qurl = qwrap.sqs_queue
 
     for i in content:
         message_wrapper.send_message(
             queue=qurl,
-            message_body=json.dump(i),
+            message_body=json.dumps(i),
             message_grp_id=uuid4()
         )

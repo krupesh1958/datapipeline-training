@@ -233,3 +233,4 @@ pyrightconfig.json
 .venv
 packages.zip
 temp.json
+temp.py

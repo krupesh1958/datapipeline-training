@@ -5,7 +5,7 @@ import boto3
 from urllib.parse import unquote_plus
 from threading import Thread
 
-from utils import send_sqs_msg as send_message
+from utils.send_sqs_msg import send_sqs as send_message
 
 
 def lambda_handler(event, context):
