@@ -232,3 +232,4 @@ pyrightconfig.json
 .env
 .venv
 packages.zip
+temp.json

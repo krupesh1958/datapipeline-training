@@ -24,8 +24,8 @@ def lambda_handler(event, context):
     bucket_name = str(file_obj["s3"]["bucket"]["name"])
     key = unquote_plus(str(file_obj["s3"]["object"]["key"]))
 
-    print("Testing code:", str(file_obj["s3"]["object"]["key"]))
-    print("Testing code:", unquote_plus(str(file_obj["s3"]["object"]["key"])))
+    print("bucket_name: %s" % bucket_name)
+    print("s3 bucket key: %s" % key)
 
     file_obj = s3.get_object(Bucket=bucket_name, key=key)
     file_content = file_obj["Body"].read().decode("utf-8")
