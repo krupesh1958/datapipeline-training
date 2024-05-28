@@ -20,10 +20,10 @@ jobs:
 
       - name: Package Lambda Function
         run: |
-          cd auth
+          cd s3_triggered_handler
           zip -r ../s3_tiggered_handler.zip .
           cd ..
-          cd testing
+          cd sqs_triggered_handler
           zip -r ../sqs_triggered_handler.zip .
           cd ..
 
