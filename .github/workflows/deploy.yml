@@ -39,14 +39,6 @@ jobs:
           s3_triggered_func: ${{ secrets.S3_TRIGGERED_FUNCTION }}
         run: |
           unzip s3_tiggered_handler.zip -d lambda_function
-          for file in $(git diff-tree --no-commit-id --name-only -r HEAD); do
-            if [[$file == *.py]]; then
-              mkdir -p lambda_function/$(dirname $file)
-              cp $file lambda_function/$file
-
-              cat lambda_function/$file
-            fi
-          done
           cd lambda_function
           zip -r ../update_lambda.zip .
           cd ..
@@ -58,14 +50,6 @@ jobs:
           sqs_tirggered_func: ${{ secrets.SQS_TIRGGERED_FUNCTION }}
         run: |
           unzip sqs_triggered_handler.zip -d test_lambda_function
-          for file in $(git diff-tree --no-commit-id --name-only -r HEAD); do
-            if [[$file == *.py]]; then
-              makdir -p test_lambda_function/$(direname $file)
-              cp $file test_lambda_function/$file
-
-              cat test_lambda_function/$file
-            fi
-          done
           cd test_lambda_function
           zip -r ../test_updated_code.zip .
           cd ..
