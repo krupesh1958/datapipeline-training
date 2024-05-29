@@ -24,3 +24,4 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "message": "Data has been send into the SQS Queue."
     }
+
