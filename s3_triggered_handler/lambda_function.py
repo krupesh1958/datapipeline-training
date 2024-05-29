@@ -1,6 +1,7 @@
 """This lambda function triggered when the upload new file into s3 bucket."""
 from __future__ import annotations
 
+import json
 import boto3
 from urllib.parse import unquote_plus
 from threading import Thread
@@ -27,12 +28,12 @@ def lambda_handler(event, context):
     print("bucket_name: %s" % bucket_name)
     print("s3 bucket key: %s" % key)
 
-    file_obj = s3.get_object(Bucket=bucket_name, key=key)
+    file_obj = s3.get_object(Bucket=bucket_name, Key=key)
     file_content = file_obj["Body"].read().decode("utf-8")
 
     # Let's put file_content into the SQS Queue.
     # We assume file_content type is List.
-    Thread(target=send_message, args=(file_content, ), daemon=True).start()
+    send_message(json.loads(file_content))
     return {
         "statusCode": 200,
         "message": "Data has been send into the SQS Queue."

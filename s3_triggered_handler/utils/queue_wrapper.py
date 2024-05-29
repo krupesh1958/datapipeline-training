@@ -59,7 +59,8 @@ class SQS:
             queue = boto_sqs.create_queue(QueueName=name, Attributes=attributes)
             print("Created queue '%s' with URL=%s", name, queue.url)
         except ClientError as error:
-            print("Couldn't create queue named '%s'.", name)
+            print("Exception: %s " % error)
+            print("Couldn't create queue named %s." % name)
             return
         else:
             self._name = name
