@@ -16,8 +16,7 @@ class SQSQueueURL(object):
 def send_message(
     queue: SQSQueueURL,
     message_body: str,
-    message_grp_id: int = 0,
-    mesage_attribute = None
+    message_grp_id: int = 0
 ):
     """
     Send a message to an Amazon SQS queue.
@@ -28,13 +27,10 @@ def send_message(
                             pairs that can be whatever you want.
     :return: The response from SQS that contains the assigned message ID.
     """
-    if not mesage_attribute:
-        mesage_attribute = {}
-
     try:
         response = queue.send_message(
             MessageBody=message_body,
-            MessageAttributes=mesage_attribute,
+            MessageAttributes={},
             MessageGroupId=str(message_grp_id),
             MessageDeduplicationId=str(message_grp_id)
         )

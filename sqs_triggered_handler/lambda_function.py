@@ -7,7 +7,6 @@ def lambda_handler(event, context):
     """
     This function handler request when the sqs triggered the function.
     """
-    sqs = boto3.client("sqs")
 
     if not event:
         return {
