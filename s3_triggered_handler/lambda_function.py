@@ -20,7 +20,7 @@ def lambda_handler(event, context):
             "statusCode": 404,
             "message": "Sorry, we don't have found the event logs"
         }
-    
+
     file_obj = event["Records"][0]
     bucket_name = str(file_obj["s3"]["bucket"]["name"])
     key = unquote_plus(str(file_obj["s3"]["object"]["key"]))
