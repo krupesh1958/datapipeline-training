@@ -1,7 +1,7 @@
 """This function trigere when the handler call."""
 import boto3
+from utils import helper
 
-from util import store_mongo as send_message
 
 def lambda_handler(event, context):
     """
@@ -15,11 +15,11 @@ def lambda_handler(event, context):
         }
 
     messages = event["Records"]
-    
+
     print("Fetching the all messages from the SQS: ", messages)
 
     # Now send this all batch messages into the MongoDB.
-    send_message(messages=messages["body"])
+    helper.store_mongo(messages=messages["body"])
     return {
         "statusCode": 200,
         "message": "Data has been send into the SQS Queue."
