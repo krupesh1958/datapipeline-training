@@ -3,7 +3,7 @@ from typing import List
 import os
 
 import logging
-from packages.pymongo import MongoClient, errors
+from pymongo import MongoClient, errors
 
 
 logger = logging.getLogger(__name__)
