@@ -13,7 +13,10 @@ def send_sqs(content) -> None:
     Resone
     Each and every content of the script has been send into the SQS FIFO queue.
     """
-    if qurl:= not qwrap.sqs_queue:
+    # If Queue already created; Getting the url
+    # Else, create new Queue; Then getting the url
+    qurl = qwrap.sqs_queue
+    if not qurl:
         qwrap.sqs_queue = "testing.fifo"
         qurl = qwrap.sqs_queue
 

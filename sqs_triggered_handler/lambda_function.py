@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     print("Fetching the all messages from the SQS: ", messages)
 
     # Now send this all batch messages into the MongoDB.
-    helper.store_mongo(messages=messages["body"])
+    helper.store_mongo(messages=messages)
     return {
         "statusCode": 200,
         "message": "Data has been send into the SQS Queue."
