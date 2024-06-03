@@ -30,7 +30,6 @@ class SQS:
         :return: A Queue object.
         """
         try:
-            if not self._name: return
             queue = boto_sqs.get_queue_by_name(QueueName="testing.fifo")
             print("Got queue '%s' with URL=%s", self._name, queue.url)
         except ClientError as error:
