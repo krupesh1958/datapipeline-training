@@ -31,7 +31,7 @@ class SQS:
         """
         try:
             if not self._name: return
-            queue = boto_sqs.get_queue_by_name(QueueName=self._name)
+            queue = boto_sqs.get_queue_by_name(QueueName="testing.fifo")
             print("Got queue '%s' with URL=%s", self._name, queue.url)
         except ClientError as error:
             print("Couldn't get queue named %s.", self._name)
