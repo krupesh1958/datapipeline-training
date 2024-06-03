@@ -16,9 +16,6 @@ def send_sqs(content) -> None:
     # If Queue already created; Getting the url
     # Else, create new Queue; Then getting the url
     qurl = qwrap.sqs_queue
-    if not qurl:
-        qwrap.sqs_queue = "testing.fifo"
-        qurl = qwrap.sqs_queue
 
     for i in content:
         message_wrapper.send_message(
